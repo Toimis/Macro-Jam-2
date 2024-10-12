@@ -1,12 +1,25 @@
 [gd_scene load_steps=3 format=3 uid="uid://bmmqdgwxijc1a"]
 
-[ext_resource type="PackedScene" uid="uid://bbyvfcaymhyd1" path="res://assets/scenes/large_asteroid.tscn" id="1_0gxf5"]
+[ext_resource type="PackedScene" uid="uid://cnv70pany2nvq" path="res://assets/scenes/large_asteroid.tscn" id="2_lwuk4"]
 [ext_resource type="PackedScene" uid="uid://cuam820ovjq4u" path="res://assets/scenes/player.tscn" id="2_u6f85"]
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Large_Asteroid" parent="." instance=ExtResource("1_0gxf5")]
-
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("2_u6f85")]
+
+[node name="Asteroid" parent="." instance=ExtResource("2_lwuk4")]
+position = Vector2(-173, -137)
+
+[node name="Asteroid2" parent="." instance=ExtResource("2_lwuk4")]
+position = Vector2(-295, 216)
+
+[node name="Asteroid3" parent="." instance=ExtResource("2_lwuk4")]
+position = Vector2(314, -139)
+
+[node name="Asteroid4" parent="." instance=ExtResource("2_lwuk4")]
+position = Vector2(-171, 77)
+
+[node name="Asteroid5" parent="." instance=ExtResource("2_lwuk4")]
+position = Vector2(25, -239)
