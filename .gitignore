@@ -1,6 +1,9 @@
 # Other
 .DS_Store
 
+# Ignore scripts in the /unorganized/ folder
+assets/unorganized/*.gd
+
 # Godot 4+ specific ignores
 .godot/
 
