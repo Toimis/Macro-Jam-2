@@ -8,21 +8,16 @@ var base_mass: float = 1024
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	contact_monitor = true
+	max_contacts_reported = 8
 	direction = Vector2( (2.0 * randf() - 1.0) , randf() )
-	speed = 256.0 * randf() + 64.0
+	speed = 256.0/256 * randf() + 64.0
 	linear_velocity = direction.normalized() * speed
 	angular_velocity = 4.0 * (2.0 * randf() - 1.0)
 	
 	var massMultiplier: float = randf() + 0.5
 	mass = base_mass * massMultiplier
 	global_scale *= massMultiplier
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-	#global_position += direction * speed * delta
-	#global_rotation += angularSpeed * delta
-
 
 func _on_body_entered(body: Node2D) -> void:
 	# Check if the colliding body is another asteroid
