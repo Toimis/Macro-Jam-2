@@ -13,6 +13,12 @@ region_enabled = true
 region_rect = Rect2(769, 2, 101, 83)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(0.98, 0.98)
 polygon = PackedVector2Array(-34, -41, 24, -41, 51, -2, 34, 33, 9, 30, -22, 42, -51, 10)
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(-34, -41, 24, -41, 51, -2, 34, 33, 9, 30, -22, 42, -51, 10)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
