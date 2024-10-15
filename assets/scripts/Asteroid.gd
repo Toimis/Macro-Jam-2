@@ -32,18 +32,15 @@ func _on_body_entered(body: Node2D) -> void:
 
 # Handle player collision
 func handle_player_collision(player: Node2D) -> void:
-	# Try to disable the CollisionPolygon2D
-	var collision_shape = $CollisionPolygon2D
-	
-	if collision_shape != null:
-		collision_shape.disabled = true
-	
 	# Wait for 0.1 seconds before destroying the asteroid
 	await get_tree().create_timer(0.125).timeout
-	
+		# Try to disable the CollisionPolygon2D
+	var collision_shape = $CollisionPolygon2D
+	if collision_shape != null:
+		collision_shape.disabled = true
 	queue_free()
 	
-# Scales polygons in the components
+# Scales polygons in the component tree
 func scale_asteroid(factor):
 	# Scale the visual sprite
 	var sprite = $Sprite2D

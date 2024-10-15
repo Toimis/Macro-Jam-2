@@ -1,32 +1,23 @@
 class_name Player
 extends RigidBody2D
 
-#@onready var camera = $Camera2D  # Get the Camera2D node
-
 const thrust = 256.0
-const side_thrust = thrust / 2.0  # Half power for side and backward thrust
+const side_thrust = thrust / 2.0  # Half power for backward thrust
 const max_speed = 512.0
 const max_angular_speed = 4.0  # Limit the rotational speed for control
 
-const Kp = 512.0  # Proportional gain for torque
-const Kd = 512.0  # Derivative gain for torque
-const max_torque = 512.0
+const rotation_torque = 512.0  # Torque applied when rotating
 
-# Called every frame
+@onready var gun_left = $GunLeft
+@onready var gun_right = $GunRight
+var rotation_speed = 2.0  # Adjust this value to control how fast it rotates
+
 func _physics_process(delta: float) -> void:
-	# Get the current target angle based on the current mouse position
-	var mouse_position = get_global_mouse_position()
-	var target_angle = (mouse_position - global_position).angle()
-	
-	# Calculate the shortest angular distance to the target angle
-	var angle_difference = wrapf(target_angle - rotation, -PI, PI)
-	
-	# Compute torque using PD controller
-	var torque = Kp * angle_difference - Kd * angular_velocity
-	torque = clamp(torque, -max_torque, max_torque)
-	
-	# Apply torque impulse
-	apply_torque_impulse(torque * delta)
+	# Rotate ship with A and D keys
+	if Input.is_key_pressed(KEY_A):  # Rotate left
+		apply_torque_impulse(-rotation_torque * delta)
+	elif Input.is_key_pressed(KEY_D):  # Rotate right
+		apply_torque_impulse(rotation_torque * delta)
 	
 	# Limit the angular velocity to prevent excessive spinning
 	if abs(angular_velocity) > max_angular_speed:
@@ -43,14 +34,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_S):  # S key
 		# Thrust backward at half power
 		thrust_vector += Vector2(-side_thrust, 0)
-	
-	if Input.is_key_pressed(KEY_A):  # A key
-		# Thrust to the left at half power
-		thrust_vector += Vector2(0, -side_thrust)
-	
-	if Input.is_key_pressed(KEY_D):  # D key
-		# Thrust to the right at half power
-		thrust_vector += Vector2(0, side_thrust)
 	
 	# Rotate the thrust_vector to match the ship's rotation
 	if thrust_vector != Vector2.ZERO:
@@ -71,7 +54,23 @@ func _physics_process(delta: float) -> void:
 		
 		# Apply the adjusted thrust_vector
 		apply_central_impulse(thrust_vector * delta)
-		
+	
+	# Update gun rotations
+	update_gun_rotation(gun_left)
+	update_gun_rotation(gun_right)
+
+func update_gun_rotation(gun):
+	var mouse_position = get_global_mouse_position()
+	var target_angle = (mouse_position - gun.global_position).angle()
+	var angle_difference = wrapf(target_angle - rotation, -PI, PI)
+	
+	# Clamp angle difference to +/- PI / 4
+	var max_gun_rotation = PI / 4
+	angle_difference = clamp(angle_difference, -max_gun_rotation, max_gun_rotation)
+	
+	# Smoothly interpolate the gun's rotation towards the target angle
+	gun.rotation = lerp_angle(gun.rotation, angle_difference + PI / 2, rotation_speed * get_process_delta_time())
+
 
 #func _process(delta):
 	# Lock the camera's rotation to the player's rotation
